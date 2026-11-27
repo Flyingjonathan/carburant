@@ -1,0 +1,206 @@
+{
+ "vehicle": {
+  "name": "Voiture diesel",
+  "tank_l": 50
+ },
+ "fuel": "Diesel (B7)",
+ "source": "carbu.com",
+ "stations": [
+  {
+   "id": "2755",
+   "zone": "Barchon",
+   "name": "TotalEnergies Barchon",
+   "addr": "Rue Lieutenant Jungling 1, 4671 Barchon"
+  },
+  {
+   "id": "20332",
+   "zone": "Barchon",
+   "name": "L'Express Carburants Barchon",
+   "addr": "Rue de la Paix 1, 4671 Barchon"
+  },
+  {
+   "id": "324",
+   "zone": "Visé",
+   "name": "Q8 Visé",
+   "addr": "Rue de Berneau 83, 4600 Visé"
+  },
+  {
+   "id": "863",
+   "zone": "Visé",
+   "name": "Lukoil Visé",
+   "addr": "Rue de Jupille 15, 4600 Visé"
+  },
+  {
+   "id": "2754",
+   "zone": "Visé",
+   "name": "TotalEnergies Visé",
+   "addr": "Rue de Maastricht 86, 4600 Visé"
+  },
+  {
+   "id": "1635",
+   "zone": "Haccourt / Oupeye",
+   "name": "Q8 Easy Haccourt",
+   "addr": "Avenue Reine Fabiola 27, 4684 Haccourt"
+  },
+  {
+   "id": "2054",
+   "zone": "Haccourt / Oupeye",
+   "name": "TotalEnergies Haccourt",
+   "addr": "Avenue Libert Froidmont 18, 4684 Haccourt"
+  },
+  {
+   "id": "3296",
+   "zone": "Haccourt / Oupeye",
+   "name": "Wynen Oupeye",
+   "addr": "Rue Elvaux 11, 4680 Oupeye"
+  },
+  {
+   "id": "3826",
+   "zone": "Wandre",
+   "name": "Gilops Wandre",
+   "addr": "Rue du Dossay 2, 4020 Wandre"
+  },
+  {
+   "id": "2055",
+   "zone": "Herstal",
+   "name": "Shell Express Herstal",
+   "addr": "Rue P.-J. Antoine 6, 4040 Herstal"
+  },
+  {
+   "id": "4005",
+   "zone": "Herstal",
+   "name": "Shell Express Herstal (Basse Campagne)",
+   "addr": "Rue Basse Campagne, 4040 Herstal"
+  },
+  {
+   "id": "871",
+   "zone": "Herstal",
+   "name": "Lukoil Herstal",
+   "addr": "Boulevard Zénobe Gramme 51, 4040 Herstal"
+  },
+  {
+   "id": "143",
+   "zone": "Herstal",
+   "name": "DATS 24 Herstal",
+   "addr": "Boulevard Zénobe Gramme 17, 4040 Herstal"
+  },
+  {
+   "id": "2789",
+   "zone": "Herstal",
+   "name": "TotalEnergies Herstal",
+   "addr": "Rue P.-J. Antoine 22, 4040 Herstal"
+  },
+  {
+   "id": "347",
+   "zone": "Herstal",
+   "name": "TotalEnergies Herstal Amitié",
+   "addr": "Rue de l'Amitié 91, 4040 Herstal"
+  },
+  {
+   "id": "348",
+   "zone": "Herstal",
+   "name": "Q8 Herstal (Crucifix)",
+   "addr": "Rue du Crucifix 40, 4040 Herstal"
+  },
+  {
+   "id": "1592",
+   "zone": "Herstal",
+   "name": "Station Piron",
+   "addr": "Rue de Hermée 196, 4040 Herstal"
+  },
+  {
+   "id": "20201",
+   "zone": "Herstal",
+   "name": "IDS Herstal",
+   "addr": "Rue de Hermée 170, 4040 Herstal"
+  },
+  {
+   "id": "20876",
+   "zone": "Herstal",
+   "name": "Shell Herstal",
+   "addr": "Rue de Hermée 201, 4040 Herstal"
+  },
+  {
+   "id": "17166",
+   "zone": "Herstal",
+   "name": "Q8 Herstal (Hermée)",
+   "addr": "Rue de Hermée 207, 4040 Herstal"
+  },
+  {
+   "id": "2396",
+   "zone": "Vottem",
+   "name": "Texaco Vottem",
+   "addr": "Rue Bonnier du Chêne 97, 4041 Vottem"
+  },
+  {
+   "id": "4144",
+   "zone": "Vottem",
+   "name": "Taverniers (Esso) Vottem",
+   "addr": "Sous la Ville 2, 4041 Vottem"
+  },
+  {
+   "id": "2833",
+   "zone": "Rocourt",
+   "name": "TotalEnergies Rocourt",
+   "addr": "Chaussée de Tongres 2, 4000 Liège"
+  },
+  {
+   "id": "1684",
+   "zone": "Rocourt",
+   "name": "Q8 Easy Rocourt",
+   "addr": "Chaussée de Tongres 90, 4000 Rocourt"
+  },
+  {
+   "id": "124",
+   "zone": "Rocourt",
+   "name": "Q8 Rocourt (Tongres 269)",
+   "addr": "Chaussée de Tongres 269, 4000 Rocourt"
+  },
+  {
+   "id": "2105",
+   "zone": "Rocourt",
+   "name": "Shell Express Rocourt",
+   "addr": "Chaussée de Tongres 338, 4000 Rocourt"
+  },
+  {
+   "id": "380",
+   "zone": "Rocourt",
+   "name": "Q8 Rocourt",
+   "addr": "Chaussée de Tongres 625, 4000 Rocourt"
+  }
+ ],
+ "history": [
+  {
+   "date": "2026-11-27",
+   "time": "17:59",
+   "prices": {
+    "2755": 2.203,
+    "20332": 2.203,
+    "324": 2.108,
+    "863": 2.108,
+    "2754": 2.203,
+    "1635": 2.108,
+    "2054": 2.203,
+    "3296": 2.203,
+    "3826": 2.023,
+    "2055": 2.026,
+    "4005": 2.026,
+    "871": 2.026,
+    "143": 2.026,
+    "2789": 2.079,
+    "347": 2.203,
+    "348": 2.203,
+    "1592": 2.076,
+    "20201": 2.203,
+    "20876": 2.203,
+    "2396": 2.203,
+    "4144": 2.203,
+    "2833": 2.203,
+    "1684": 2.033,
+    "124": 2.203,
+    "2105": 2.033,
+    "380": 2.033
+   }
+  }
+ ]
+}
