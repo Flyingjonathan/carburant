@@ -86,7 +86,17 @@ def lire_prix():
     return prix
 
 
-def construire(prix, veille, maintenant):
+def depuis(date_veille, maintenant):
+    """'depuis hier' ou 'depuis le 25/11' selon l'ecart reel avec le releve precedent."""
+    if not date_veille:
+        return "depuis le dernier relevé"
+    d = datetime.strptime(date_veille, "%Y-%m-%d").date()
+    if (maintenant.date() - d).days == 1:
+        return "depuis hier"
+    return "depuis le " + d.strftime("%d/%m")
+
+
+def construire(prix, veille, maintenant, date_veille=None):
     """Construit le contenu de prix.json. veille = {id: prix} du dernier jour different."""
     pompes = []
     for ident, zone, nom, adresse in POMPES:
@@ -139,9 +149,10 @@ def construire(prix, veille, maintenant):
     if not veille_vals:
         sortie["txt_tendance"] = "premier relevé"
     elif tendance == 0:
-        sortie["txt_tendance"] = "stable depuis hier"
+        sortie["txt_tendance"] = "= stable " + depuis(date_veille, maintenant)
     else:
-        sortie["txt_tendance"] = ("en hausse de " if tendance > 0 else "en baisse de ") + eur(abs(tendance), 3) + " €/L"
+        signe = "▲ +" if tendance > 0 else "▼ −"
+        sortie["txt_tendance"] = signe + eur(abs(tendance), 3) + " €/L " + depuis(date_veille, maintenant)
     for pct in (100, 75, 50, 25):
         sortie[f"txt_plein_{pct}"] = (eur(sortie[f"plein_{pct}_bas"]) + " € à " + eur(sortie[f"plein_{pct}_haut"])
                                       + " € · gain " + eur(sortie[f"plein_{pct}_gain"]) + " €")
@@ -174,10 +185,16 @@ def main():
     # Prix de la veille : ceux du fichier actuel s'il date d'un autre jour, sinon ceux qu'il avait gardes.
     if ancien.get("date") and ancien["date"] != maintenant.strftime("%Y-%m-%d"):
         veille = {x["id"]: x["prix"] for x in ancien.get("pompes", [])}
+        date_veille = ancien["date"]
     else:
         veille = ancien.get("veille", {})
-    sortie = construire(trouves, veille, maintenant)
+        date_veille = ancien.get("veille_date")
+        if veille and not date_veille:  # fichiers ecrits avant l'ajout de veille_date
+            hist_dates = sorted(h["date"] for h in hist if h["date"] != maintenant.strftime("%Y-%m-%d"))
+            date_veille = hist_dates[-1] if hist_dates else None
+    sortie = construire(trouves, veille, maintenant, date_veille)
     sortie["veille"] = veille
+    sortie["veille_date"] = date_veille
     f_prix.write_text(json.dumps(sortie, ensure_ascii=False, indent=1) + "\n", "utf-8")
 
     hist = [h for h in hist if h["date"] != sortie["date"]]
