@@ -48,6 +48,25 @@ POMPES = [
     ("347", "Herstal", "TotalEnergies Herstal Amitié", "Rue de l'Amitié 91, 4040 Herstal"),
     ("348", "Herstal", "Q8 Herstal (Crucifix)", "Rue du Crucifix 40, 4040 Herstal"),
 ]
+# Nom court par pompe, pour les lignes du classement affichees dans bOS
+COURT = {
+    "2051": "Shell Express", "869": "Lukoil", "1632": "Q8 Easy", "307": "Q8", "2781": "TotalEnergies E40",
+    "3225": "Esso", "3905": "Q8", "2786": "TotalEnergies", "3745": "DATS 24", "1633": "Q8 Easy",
+    "163": "DATS 24", "2053": "Shell Express", "1684": "Q8 Easy", "2105": "Shell Express", "380": "Q8",
+    "2396": "Texaco", "4144": "Esso Taverniers", "2055": "Shell Express", "4005": "Shell Express",
+    "871": "Lukoil", "143": "DATS 24", "1592": "Station Piron", "2789": "TotalEnergies", "17166": "Q8",
+    "20876": "Shell", "347": "TotalEnergies", "348": "Q8",
+}
+
+
+def adresse_courte(adresse):
+    a = re.sub(r",\s*\d{4}\s+", ", ", adresse)
+    for long, court in (("Autoroute E40 Bruxelles-Liège", "Aire E40 vers Liège"), ("Chaussée", "Chée"),
+                        ("Boulevard", "Bd"), ("Edouard", "E.")):
+        a = a.replace(long, court)
+    return a
+
+
 TAG = re.compile(r'data-id="(\d+)"[^>]*?data-fuelname="([^"]*)"[^>]*?data-price="([0-9.]+)"', re.S)
 
 
@@ -128,7 +147,11 @@ def construire(prix, veille, maintenant):
                                       + " € · gain " + eur(sortie[f"plein_{pct}_gain"]) + " €")
     classement = sorted(pompes, key=lambda x: x["prix"])
     for rang, x in enumerate(classement, 1):
-        sortie[f"l{rang:02d}"] = eur(x["prix"], 3) + " € · " + x["nom"] + " · " + x["adresse"]
+        repere = "▼ " if x["prix"] == bas else "▲ " if x["prix"] == haut else ""
+        sortie[f"l{rang:02d}"] = (repere + eur(x["prix"], 3) + " € · " + COURT.get(x["id"], x["nom"])
+                                  + " · " + adresse_courte(x["adresse"]))
+    for rang in range(len(classement) + 1, len(POMPES) + 1):
+        sortie[f"l{rang:02d}"] = "-"  # pompe absente du releve du jour
     sortie["top"] = classement[:5]
     sortie["pompes"] = pompes
     return sortie
