@@ -1,5 +1,5 @@
 {
- "maj": "27/11/2026 09:32",
+ "maj": "27/11/2026 09:57",
  "date": "2026-11-27",
  "carburant": "Super 95 (E10)",
  "source": "carbu.com",
@@ -39,7 +39,7 @@
  "txt_ecart": "0,180 €/L",
  "txt_min_nom": "Shell Express Waremme",
  "txt_max_nom": "Q8 Easy Waremme (+ 11 autres)",
- "txt_tendance": "stable depuis hier",
+ "txt_tendance": "= stable depuis hier",
  "txt_plein_100": "80,10 € à 89,10 € · gain 9,00 €",
  "txt_plein_75": "60,08 € à 66,83 € · gain 6,75 €",
  "txt_plein_50": "40,05 € à 44,55 € · gain 4,50 €",
@@ -391,5 +391,6 @@
   "20876": 1.782,
   "347": 1.782,
   "348": 1.782
- }
+ },
+ "veille_date": "2026-11-26"
 }
