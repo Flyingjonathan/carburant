@@ -1,0 +1,33 @@
+name: Relevé Super 95
+
+on:
+  schedule:
+    # 05:50 heure belge : 04:50 UTC en hiver, 03:50 UTC en été (les deux tournent, le second ne fait que rafraîchir)
+    - cron: "50 3 * * *"
+    - cron: "50 4 * * *"
+  workflow_dispatch:
+  push:
+    paths:
+      - scrape.py
+      - .github/workflows/releve.yml
+
+permissions:
+  contents: write
+
+jobs:
+  releve:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Lire les prix sur carbu.com
+        run: python scrape.py
+      - name: Enregistrer le relevé
+        run: |
+          git config user.name "releve-carburant"
+          git config user.email "releve-carburant@users.noreply.github.com"
+          git add prix.json historique.json
+          git diff --cached --quiet || git commit -m "Relevé Super 95 du $(TZ=Europe/Brussels date +%d/%m/%Y)"
+          git push

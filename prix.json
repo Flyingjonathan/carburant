@@ -1,0 +1,329 @@
+{
+ "maj": "26/11/2026 23:35",
+ "date": "2026-11-26",
+ "carburant": "Super 95 (E10)",
+ "source": "carbu.com",
+ "reservoir_l": 50,
+ "nb_pompes": 27,
+ "min_prix": 1.602,
+ "min_nom": "Shell Express Waremme",
+ "min_adresse": "Chaussée Romaine 218-220, 4300 Waremme",
+ "min_nb": 1,
+ "max_prix": 1.782,
+ "max_nom": "Q8 Easy Waremme",
+ "max_adresse": "Place de Gérardmer 55, 4300 Waremme",
+ "max_nb": 11,
+ "moyenne": 1.69,
+ "ecart_litre": 0.18,
+ "tendance_min": 0.0,
+ "tendance_texte": "stable",
+ "plein_100_litres": 50.0,
+ "plein_100_bas": 80.1,
+ "plein_100_haut": 89.1,
+ "plein_100_gain": 9.0,
+ "plein_75_litres": 37.5,
+ "plein_75_bas": 60.08,
+ "plein_75_haut": 66.83,
+ "plein_75_gain": 6.75,
+ "plein_50_litres": 25.0,
+ "plein_50_bas": 40.05,
+ "plein_50_haut": 44.55,
+ "plein_50_gain": 4.5,
+ "plein_25_litres": 12.5,
+ "plein_25_bas": 20.03,
+ "plein_25_haut": 22.27,
+ "plein_25_gain": 2.25,
+ "top": [
+  {
+   "id": "2051",
+   "zone": "Waremme",
+   "nom": "Shell Express Waremme",
+   "adresse": "Chaussée Romaine 218-220, 4300 Waremme",
+   "prix": 1.602,
+   "plein": 80.1,
+   "variation": 0.0
+  },
+  {
+   "id": "3745",
+   "zone": "Loncin / Ans",
+   "nom": "DATS 24 Loncin",
+   "adresse": "Rue Edouard Colson 316, 4431 Loncin",
+   "prix": 1.609,
+   "plein": 80.45,
+   "variation": 0.0
+  },
+  {
+   "id": "1633",
+   "zone": "Loncin / Ans",
+   "nom": "Q8 Easy Ans",
+   "adresse": "Rue Jean Jaurès 33, 4430 Ans",
+   "prix": 1.612,
+   "plein": 80.6,
+   "variation": 0.0
+  },
+  {
+   "id": "163",
+   "zone": "Loncin / Ans",
+   "nom": "DATS 24 Ans",
+   "adresse": "Rue des Français 88, 4430 Ans",
+   "prix": 1.612,
+   "plein": 80.6,
+   "variation": 0.0
+  },
+  {
+   "id": "2053",
+   "zone": "Loncin / Ans",
+   "nom": "Shell Express Ans",
+   "adresse": "Chaussée du Roi Albert 7, 4430 Ans",
+   "prix": 1.612,
+   "plein": 80.6,
+   "variation": 0.0
+  }
+ ],
+ "pompes": [
+  {
+   "id": "2051",
+   "zone": "Waremme",
+   "nom": "Shell Express Waremme",
+   "adresse": "Chaussée Romaine 218-220, 4300 Waremme",
+   "prix": 1.602,
+   "plein": 80.1,
+   "variation": 0.0
+  },
+  {
+   "id": "869",
+   "zone": "Waremme",
+   "nom": "Lukoil Waremme",
+   "adresse": "Rue Saint-Eloi 2, 4300 Waremme",
+   "prix": 1.632,
+   "plein": 81.6,
+   "variation": 0.0
+  },
+  {
+   "id": "1632",
+   "zone": "Waremme",
+   "nom": "Q8 Easy Waremme",
+   "adresse": "Place de Gérardmer 55, 4300 Waremme",
+   "prix": 1.782,
+   "plein": 89.1,
+   "variation": 0.0
+  },
+  {
+   "id": "307",
+   "zone": "Waremme",
+   "nom": "Q8 Waremme",
+   "adresse": "Rue de Huy 157, 4300 Waremme",
+   "prix": 1.782,
+   "plein": 89.1,
+   "variation": 0.0
+  },
+  {
+   "id": "2781",
+   "zone": "E40",
+   "nom": "TotalEnergies Waremme (aire E40, direction Liège)",
+   "adresse": "Autoroute E40 Bruxelles-Liège, 4300 Waremme",
+   "prix": 1.782,
+   "plein": 89.1,
+   "variation": 0.0
+  },
+  {
+   "id": "3225",
+   "zone": "Remicourt",
+   "nom": "Esso Remicourt",
+   "adresse": "Chaussée Verte 10, 4350 Remicourt",
+   "prix": 1.717,
+   "plein": 85.85,
+   "variation": 0.0
+  },
+  {
+   "id": "3905",
+   "zone": "Awans",
+   "nom": "Q8 Awans",
+   "adresse": "Route de Bruxelles 170, 4340 Awans",
+   "prix": 1.782,
+   "plein": 89.1,
+   "variation": 0.0
+  },
+  {
+   "id": "2786",
+   "zone": "Awans",
+   "nom": "TotalEnergies Hognoul",
+   "adresse": "Chaussée de Bruxelles 58, 4342 Hognoul",
+   "prix": 1.782,
+   "plein": 89.1,
+   "variation": 0.0
+  },
+  {
+   "id": "3745",
+   "zone": "Loncin / Ans",
+   "nom": "DATS 24 Loncin",
+   "adresse": "Rue Edouard Colson 316, 4431 Loncin",
+   "prix": 1.609,
+   "plein": 80.45,
+   "variation": 0.0
+  },
+  {
+   "id": "1633",
+   "zone": "Loncin / Ans",
+   "nom": "Q8 Easy Ans",
+   "adresse": "Rue Jean Jaurès 33, 4430 Ans",
+   "prix": 1.612,
+   "plein": 80.6,
+   "variation": 0.0
+  },
+  {
+   "id": "163",
+   "zone": "Loncin / Ans",
+   "nom": "DATS 24 Ans",
+   "adresse": "Rue des Français 88, 4430 Ans",
+   "prix": 1.612,
+   "plein": 80.6,
+   "variation": 0.0
+  },
+  {
+   "id": "2053",
+   "zone": "Loncin / Ans",
+   "nom": "Shell Express Ans",
+   "adresse": "Chaussée du Roi Albert 7, 4430 Ans",
+   "prix": 1.612,
+   "plein": 80.6,
+   "variation": 0.0
+  },
+  {
+   "id": "1684",
+   "zone": "Rocourt",
+   "nom": "Q8 Easy Rocourt",
+   "adresse": "Chaussée de Tongres 90, 4000 Rocourt",
+   "prix": 1.612,
+   "plein": 80.6,
+   "variation": 0.0
+  },
+  {
+   "id": "2105",
+   "zone": "Rocourt",
+   "nom": "Shell Express Rocourt",
+   "adresse": "Chaussée de Tongres 338, 4000 Rocourt",
+   "prix": 1.612,
+   "plein": 80.6,
+   "variation": 0.0
+  },
+  {
+   "id": "380",
+   "zone": "Rocourt",
+   "nom": "Q8 Rocourt",
+   "adresse": "Chaussée de Tongres 625, 4000 Rocourt",
+   "prix": 1.612,
+   "plein": 80.6,
+   "variation": 0.0
+  },
+  {
+   "id": "2396",
+   "zone": "Vottem",
+   "nom": "Texaco Vottem",
+   "adresse": "Rue Bonnier du Chêne 97, 4041 Vottem",
+   "prix": 1.782,
+   "plein": 89.1,
+   "variation": 0.0
+  },
+  {
+   "id": "4144",
+   "zone": "Vottem",
+   "nom": "Taverniers (Esso) Vottem",
+   "adresse": "Sous la Ville 2, 4041 Vottem",
+   "prix": 1.782,
+   "plein": 89.1,
+   "variation": 0.0
+  },
+  {
+   "id": "2055",
+   "zone": "Herstal",
+   "nom": "Shell Express Herstal",
+   "adresse": "Rue P.-J. Antoine 6, 4040 Herstal",
+   "prix": 1.612,
+   "plein": 80.6,
+   "variation": 0.0
+  },
+  {
+   "id": "4005",
+   "zone": "Herstal",
+   "nom": "Shell Express Herstal (Basse Campagne)",
+   "adresse": "Rue Basse Campagne, 4040 Herstal",
+   "prix": 1.612,
+   "plein": 80.6,
+   "variation": 0.0
+  },
+  {
+   "id": "871",
+   "zone": "Herstal",
+   "nom": "Lukoil Herstal",
+   "adresse": "Boulevard Zénobe Gramme 51, 4040 Herstal",
+   "prix": 1.626,
+   "plein": 81.3,
+   "variation": 0.0
+  },
+  {
+   "id": "143",
+   "zone": "Herstal",
+   "nom": "DATS 24 Herstal",
+   "adresse": "Boulevard Zénobe Gramme 17, 4040 Herstal",
+   "prix": 1.626,
+   "plein": 81.3,
+   "variation": 0.0
+  },
+  {
+   "id": "1592",
+   "zone": "Herstal",
+   "nom": "Station Piron",
+   "adresse": "Rue de Hermée 196, 4040 Herstal",
+   "prix": 1.652,
+   "plein": 82.6,
+   "variation": 0.0
+  },
+  {
+   "id": "2789",
+   "zone": "Herstal",
+   "nom": "TotalEnergies Herstal",
+   "adresse": "Rue P.-J. Antoine 22, 4040 Herstal",
+   "prix": 1.659,
+   "plein": 82.95,
+   "variation": 0.0
+  },
+  {
+   "id": "17166",
+   "zone": "Herstal",
+   "nom": "Q8 Herstal (Hermée)",
+   "adresse": "Rue de Hermée 207, 4040 Herstal",
+   "prix": 1.782,
+   "plein": 89.1,
+   "variation": 0.0
+  },
+  {
+   "id": "20876",
+   "zone": "Herstal",
+   "nom": "Shell Herstal",
+   "adresse": "Rue de Hermée 201, 4040 Herstal",
+   "prix": 1.782,
+   "plein": 89.1,
+   "variation": 0.0
+  },
+  {
+   "id": "347",
+   "zone": "Herstal",
+   "nom": "TotalEnergies Herstal Amitié",
+   "adresse": "Rue de l'Amitié 91, 4040 Herstal",
+   "prix": 1.782,
+   "plein": 89.1,
+   "variation": 0.0
+  },
+  {
+   "id": "348",
+   "zone": "Herstal",
+   "nom": "Q8 Herstal (Crucifix)",
+   "adresse": "Rue du Crucifix 40, 4040 Herstal",
+   "prix": 1.782,
+   "plein": 89.1,
+   "variation": 0.0
+  }
+ ],
+ "veille": {}
+}
