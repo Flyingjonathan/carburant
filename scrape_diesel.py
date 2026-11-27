@@ -1,0 +1,228 @@
+#!/usr/bin/env python3
+"""Releve quotidien du prix du Diesel (B7) entre Dalhem et Rocourt.
+
+Meme principe que scrape.py (Super 95 Waremme-Herstal) : lit deux pages de liste
+de carbu.com, garde les pompes suivies et ecrit :
+  - prix_diesel.json       : petit fichier lu par bOS (ComfortClick)
+  - historique_diesel.json : un resume par jour (min, max, moyenne)
+  - data_diesel.json       : detail par pompe et par jour, lu par diesel.html
+"""
+import json
+import re
+import sys
+import urllib.request
+from datetime import datetime
+from pathlib import Path
+from zoneinfo import ZoneInfo
+
+RESERVOIR_L = 50  # reservoir de la voiture (a ajuster)
+VEHICULE = "Voiture diesel"
+CARBURANT = "Diesel (B7)"
+PAGES = [
+    "https://carbu.com/belgique//index.php/liste-stations-service/GO/Dalhem/4607/BE_lg_1058",
+    "https://carbu.com/belgique//index.php/liste-stations-service/GO/Herstal/4040/BE_lg_836",
+]
+# id carbu.com, zone, nom, adresse (dans l'ordre du trajet)
+POMPES = [
+    ("2755", "Barchon", "TotalEnergies Barchon", "Rue Lieutenant Jungling 1, 4671 Barchon"),
+    ("20332", "Barchon", "L'Express Carburants Barchon", "Rue de la Paix 1, 4671 Barchon"),
+    ("324", "Visé", "Q8 Visé", "Rue de Berneau 83, 4600 Visé"),
+    ("863", "Visé", "Lukoil Visé", "Rue de Jupille 15, 4600 Visé"),
+    ("2754", "Visé", "TotalEnergies Visé", "Rue de Maastricht 86, 4600 Visé"),
+    ("1635", "Haccourt / Oupeye", "Q8 Easy Haccourt", "Avenue Reine Fabiola 27, 4684 Haccourt"),
+    ("2054", "Haccourt / Oupeye", "TotalEnergies Haccourt", "Avenue Libert Froidmont 18, 4684 Haccourt"),
+    ("3296", "Haccourt / Oupeye", "Wynen Oupeye", "Rue Elvaux 11, 4680 Oupeye"),
+    ("3826", "Wandre", "Gilops Wandre", "Rue du Dossay 2, 4020 Wandre"),
+    ("2055", "Herstal", "Shell Express Herstal", "Rue P.-J. Antoine 6, 4040 Herstal"),
+    ("4005", "Herstal", "Shell Express Herstal (Basse Campagne)", "Rue Basse Campagne, 4040 Herstal"),
+    ("871", "Herstal", "Lukoil Herstal", "Boulevard Zénobe Gramme 51, 4040 Herstal"),
+    ("143", "Herstal", "DATS 24 Herstal", "Boulevard Zénobe Gramme 17, 4040 Herstal"),
+    ("2789", "Herstal", "TotalEnergies Herstal", "Rue P.-J. Antoine 22, 4040 Herstal"),
+    ("347", "Herstal", "TotalEnergies Herstal Amitié", "Rue de l'Amitié 91, 4040 Herstal"),
+    ("348", "Herstal", "Q8 Herstal (Crucifix)", "Rue du Crucifix 40, 4040 Herstal"),
+    ("1592", "Herstal", "Station Piron", "Rue de Hermée 196, 4040 Herstal"),
+    ("20201", "Herstal", "IDS Herstal", "Rue de Hermée 170, 4040 Herstal"),
+    ("20876", "Herstal", "Shell Herstal", "Rue de Hermée 201, 4040 Herstal"),
+    ("17166", "Herstal", "Q8 Herstal (Hermée)", "Rue de Hermée 207, 4040 Herstal"),
+    ("2396", "Vottem", "Texaco Vottem", "Rue Bonnier du Chêne 97, 4041 Vottem"),
+    ("4144", "Vottem", "Taverniers (Esso) Vottem", "Sous la Ville 2, 4041 Vottem"),
+    ("2833", "Rocourt", "TotalEnergies Rocourt", "Chaussée de Tongres 2, 4000 Liège"),
+    ("1684", "Rocourt", "Q8 Easy Rocourt", "Chaussée de Tongres 90, 4000 Rocourt"),
+    ("124", "Rocourt", "Q8 Rocourt (Tongres 269)", "Chaussée de Tongres 269, 4000 Rocourt"),
+    ("2105", "Rocourt", "Shell Express Rocourt", "Chaussée de Tongres 338, 4000 Rocourt"),
+    ("380", "Rocourt", "Q8 Rocourt", "Chaussée de Tongres 625, 4000 Rocourt"),
+]
+# Nom court par pompe, pour les lignes du classement affichees dans bOS
+COURT = {
+    "2755": "TotalEnergies", "20332": "L'Express", "324": "Q8", "863": "Lukoil", "2754": "TotalEnergies",
+    "1635": "Q8 Easy", "2054": "TotalEnergies", "3296": "Wynen", "3826": "Gilops", "2055": "Shell Express",
+    "4005": "Shell Express", "871": "Lukoil", "143": "DATS 24", "2789": "TotalEnergies", "347": "TotalEnergies",
+    "348": "Q8", "1592": "Station Piron", "20201": "IDS", "20876": "Shell", "17166": "Q8", "2396": "Texaco",
+    "4144": "Esso Taverniers", "2833": "TotalEnergies", "1684": "Q8 Easy", "124": "Q8", "2105": "Shell Express",
+    "380": "Q8",
+}
+
+
+def adresse_courte(adresse):
+    a = re.sub(r",\s*\d{4}\s+", ", ", adresse)
+    for long, court in (("Autoroute E40 Bruxelles-Liège", "Aire E40 vers Liège"), ("Chaussée", "Chée"),
+                        ("Boulevard", "Bd"), ("Edouard", "E.")):
+        a = a.replace(long, court)
+    return a
+
+
+TAG = re.compile(r'data-id="(\d+)"[^>]*?data-fuelname="([^"]*)"[^>]*?data-price="([0-9.]+)"', re.S)
+
+
+def lire_prix():
+    """Renvoie {id: prix} pour toutes les pompes trouvees sur les pages de liste."""
+    prix = {}
+    for url in PAGES:
+        req = urllib.request.Request(url, headers={
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0 Safari/537.36",
+            "Accept-Language": "fr-BE,fr;q=0.9",
+        })
+        with urllib.request.urlopen(req, timeout=60) as rep:
+            html = rep.read().decode("utf-8", "replace")
+        for ident, carburant, valeur in TAG.findall(html):
+            if carburant.strip() == CARBURANT and ident not in prix:
+                prix[ident] = float(valeur)
+    return prix
+
+
+def depuis(date_veille, maintenant):
+    """'depuis hier' ou 'depuis le 25/11' selon l'ecart reel avec le releve precedent."""
+    if not date_veille:
+        return "depuis le dernier relevé"
+    d = datetime.strptime(date_veille, "%Y-%m-%d").date()
+    if (maintenant.date() - d).days == 1:
+        return "depuis hier"
+    return "depuis le " + d.strftime("%d/%m")
+
+
+def construire(prix, veille, maintenant, date_veille=None):
+    """Construit le contenu de prix.json. veille = {id: prix} du dernier jour different."""
+    pompes = []
+    for ident, zone, nom, adresse in POMPES:
+        if ident not in prix:
+            continue
+        p = round(prix[ident], 3)
+        variation = round(p - veille[ident], 3) if ident in veille else 0.0
+        pompes.append({"id": ident, "zone": zone, "nom": nom, "adresse": adresse,
+                       "prix": p, "plein": round(p * RESERVOIR_L, 2), "variation": variation})
+    valeurs = [x["prix"] for x in pompes]
+    bas, haut = min(valeurs), max(valeurs)
+    moins = [x for x in pompes if x["prix"] == bas]
+    plus = [x for x in pompes if x["prix"] == haut]
+    veille_vals = [veille[x["id"]] for x in pompes if x["id"] in veille]
+    tendance = round(bas - min(veille_vals), 3) if veille_vals else 0.0
+    sortie = {
+        "maj": maintenant.strftime("%d/%m/%Y %H:%M"),
+        "date": maintenant.strftime("%Y-%m-%d"),
+        "carburant": CARBURANT,
+        "source": "carbu.com",
+        "reservoir_l": RESERVOIR_L,
+        "nb_pompes": len(pompes),
+        "min_prix": bas, "min_nom": moins[0]["nom"], "min_adresse": adresse_courte(moins[0]["adresse"]), "min_nb": len(moins),
+        "max_prix": haut, "max_nom": plus[0]["nom"], "max_adresse": adresse_courte(plus[0]["adresse"]), "max_nb": len(plus),
+        "moyenne": round(sum(valeurs) / len(valeurs), 3),
+        "ecart_litre": round(haut - bas, 3),
+        "tendance_min": tendance,
+        "tendance_texte": "en hausse" if tendance > 0 else "en baisse" if tendance < 0 else "stable",
+    }
+    for pct in (100, 75, 50, 25):
+        litres = RESERVOIR_L * pct / 100
+        sortie[f"plein_{pct}_litres"] = litres
+        sortie[f"plein_{pct}_bas"] = round(litres * bas, 2)
+        sortie[f"plein_{pct}_haut"] = round(litres * haut, 2)
+        sortie[f"plein_{pct}_gain"] = round(litres * (haut - bas), 2)
+    # Textes prets a afficher dans bOS (un champ = une ligne de la page)
+    def eur(v, dec=2):
+        return f"{v:.{dec}f}".replace(".", ",")
+
+    def avec_autres(liste):
+        n = len(liste) - 1
+        return liste[0]["nom"] + (f" (+ {n} autre{'s' if n > 1 else ''})" if n else "")
+
+    sortie["txt_min"] = eur(bas, 3) + " €/L"
+    sortie["txt_max"] = eur(haut, 3) + " €/L"
+    sortie["txt_moyenne"] = eur(sortie["moyenne"], 3) + " €/L"
+    sortie["txt_ecart"] = eur(haut - bas, 3) + " €/L"
+    sortie["txt_min_nom"] = avec_autres(moins)
+    sortie["txt_max_nom"] = avec_autres(plus)
+    if not veille_vals:
+        sortie["txt_tendance"] = "premier relevé"
+    elif tendance == 0:
+        sortie["txt_tendance"] = "= stable " + depuis(date_veille, maintenant)
+    else:
+        signe = "▲ +" if tendance > 0 else "▼ −"
+        sortie["txt_tendance"] = signe + eur(abs(tendance), 3) + " €/L " + depuis(date_veille, maintenant)
+    for pct in (100, 75, 50, 25):
+        sortie[f"txt_plein_{pct}"] = (eur(sortie[f"plein_{pct}_bas"]) + " € à " + eur(sortie[f"plein_{pct}_haut"])
+                                      + " € · gain " + eur(sortie[f"plein_{pct}_gain"]) + " €")
+    classement = sorted(pompes, key=lambda x: x["prix"])
+    for rang, x in enumerate(classement, 1):
+        repere = "▼ " if x["prix"] == bas else "▲ " if x["prix"] == haut else ""
+        sortie[f"l{rang:02d}"] = (repere + eur(x["prix"], 3) + " € · " + COURT.get(x["id"], x["nom"])
+                                  + " · " + adresse_courte(x["adresse"]))
+    for rang in range(len(classement) + 1, len(POMPES) + 1):
+        sortie[f"l{rang:02d}"] = "-"  # pompe absente du releve du jour
+    sortie["top"] = classement[:5]
+    sortie["pompes"] = pompes
+    return sortie
+
+
+def main():
+    racine = Path(__file__).parent
+    f_prix, f_hist = racine / "prix_diesel.json", racine / "historique_diesel.json"
+    maintenant = datetime.now(ZoneInfo("Europe/Brussels"))
+    ancien = json.loads(f_prix.read_text("utf-8")) if f_prix.exists() else {}
+    hist = json.loads(f_hist.read_text("utf-8")) if f_hist.exists() else []
+
+    prix = lire_prix()
+    suivies = {i for i, *_ in POMPES}
+    trouves = {k: v for k, v in prix.items() if k in suivies}
+    if len(trouves) < 10:
+        print(f"Trop peu de prix lus ({len(trouves)}) : fichiers inchanges.", file=sys.stderr)
+        return 1
+
+    # Prix de la veille : ceux du fichier actuel s'il date d'un autre jour, sinon ceux qu'il avait gardes.
+    if ancien.get("date") and ancien["date"] != maintenant.strftime("%Y-%m-%d"):
+        veille = {x["id"]: x["prix"] for x in ancien.get("pompes", [])}
+        date_veille = ancien["date"]
+    else:
+        veille = ancien.get("veille", {})
+        date_veille = ancien.get("veille_date")
+        if veille and not date_veille:  # fichiers ecrits avant l'ajout de veille_date
+            hist_dates = sorted(h["date"] for h in hist if h["date"] != maintenant.strftime("%Y-%m-%d"))
+            date_veille = hist_dates[-1] if hist_dates else None
+    sortie = construire(trouves, veille, maintenant, date_veille)
+    sortie["veille"] = veille
+    sortie["veille_date"] = date_veille
+    f_prix.write_text(json.dumps(sortie, ensure_ascii=False, indent=1) + "\n", "utf-8")
+
+    hist = [h for h in hist if h["date"] != sortie["date"]]
+    hist.append({"date": sortie["date"], "min": sortie["min_prix"], "max": sortie["max_prix"],
+                 "moyenne": sortie["moyenne"], "gain_plein": sortie["plein_100_gain"]})
+    f_hist.write_text(json.dumps(hist[-400:], ensure_ascii=False, indent=1) + "\n", "utf-8")
+    # data_diesel.json : detail par pompe et par jour, lu par la page diesel.html
+    f_data = racine / "data_diesel.json"
+    data = json.loads(f_data.read_text("utf-8")) if f_data.exists() else {"history": []}
+    data = {
+        "vehicle": {"name": VEHICULE, "tank_l": RESERVOIR_L},
+        "fuel": CARBURANT,
+        "source": "carbu.com",
+        "stations": [{"id": i, "zone": z, "name": n, "addr": a} for i, z, n, a in POMPES],
+        "history": [h for h in data.get("history", []) if h["date"] != sortie["date"]],
+    }
+    data["history"].append({"date": sortie["date"], "time": maintenant.strftime("%H:%M"),
+                            "prices": {x["id"]: x["prix"] for x in sortie["pompes"]}})
+    data["history"] = data["history"][-400:]
+    f_data.write_text(json.dumps(data, ensure_ascii=False, indent=1) + "\n", "utf-8")
+
+    print(f"{sortie['nb_pompes']} pompes, min {sortie['min_prix']} ({sortie['min_nom']}), max {sortie['max_prix']}")
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

@@ -1,0 +1,43 @@
+name: Relevé Diesel
+
+on:
+  schedule:
+    # 05:55 heure belge (5 min après le relevé Super 95) : 04:55 UTC en hiver, 03:55 UTC en été
+    - cron: "55 3 * * *"
+    - cron: "55 4 * * *"
+  workflow_dispatch:
+  push:
+    paths:
+      - scrape_diesel.py
+      - .github/workflows/releve_diesel.yml
+
+permissions:
+  contents: write
+
+concurrency:
+  group: releve-diesel
+  cancel-in-progress: false
+
+jobs:
+  releve:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Lire les prix sur carbu.com
+        run: python scrape_diesel.py
+      - name: Enregistrer le relevé
+        run: |
+          git config user.name "releve-carburant"
+          git config user.email "releve-carburant@users.noreply.github.com"
+          git add prix_diesel.json historique_diesel.json data_diesel.json
+          git diff --cached --quiet && exit 0
+          git commit -m "Relevé Diesel du $(TZ=Europe/Brussels date +%d/%m/%Y)"
+          # le relevé Super 95 peut avoir poussé juste avant : on se remet à jour puis on réessaie
+          for i in 1 2 3; do
+            git pull --rebase origin main && git push && exit 0
+            sleep 10
+          done
+          exit 1
