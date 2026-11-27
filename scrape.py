@@ -103,7 +103,33 @@ def construire(prix, veille, maintenant):
         sortie[f"plein_{pct}_bas"] = round(litres * bas, 2)
         sortie[f"plein_{pct}_haut"] = round(litres * haut, 2)
         sortie[f"plein_{pct}_gain"] = round(litres * (haut - bas), 2)
-    sortie["top"] = sorted(pompes, key=lambda x: x["prix"])[:5]
+    # Textes prets a afficher dans bOS (un champ = une ligne de la page)
+    def eur(v, dec=2):
+        return f"{v:.{dec}f}".replace(".", ",")
+
+    def avec_autres(liste):
+        n = len(liste) - 1
+        return liste[0]["nom"] + (f" (+ {n} autre{'s' if n > 1 else ''})" if n else "")
+
+    sortie["txt_min"] = eur(bas, 3) + " €/L"
+    sortie["txt_max"] = eur(haut, 3) + " €/L"
+    sortie["txt_moyenne"] = eur(sortie["moyenne"], 3) + " €/L"
+    sortie["txt_ecart"] = eur(haut - bas, 3) + " €/L"
+    sortie["txt_min_nom"] = avec_autres(moins)
+    sortie["txt_max_nom"] = avec_autres(plus)
+    if not veille_vals:
+        sortie["txt_tendance"] = "premier relevé"
+    elif tendance == 0:
+        sortie["txt_tendance"] = "stable depuis hier"
+    else:
+        sortie["txt_tendance"] = ("en hausse de " if tendance > 0 else "en baisse de ") + eur(abs(tendance), 3) + " €/L"
+    for pct in (100, 75, 50, 25):
+        sortie[f"txt_plein_{pct}"] = (eur(sortie[f"plein_{pct}_bas"]) + " € à " + eur(sortie[f"plein_{pct}_haut"])
+                                      + " € · gain " + eur(sortie[f"plein_{pct}_gain"]) + " €")
+    classement = sorted(pompes, key=lambda x: x["prix"])
+    for rang, x in enumerate(classement, 1):
+        sortie[f"l{rang:02d}"] = eur(x["prix"], 3) + " € · " + x["nom"] + " · " + x["adresse"]
+    sortie["top"] = classement[:5]
     sortie["pompes"] = pompes
     return sortie
 
@@ -135,6 +161,21 @@ def main():
     hist.append({"date": sortie["date"], "min": sortie["min_prix"], "max": sortie["max_prix"],
                  "moyenne": sortie["moyenne"], "gain_plein": sortie["plein_100_gain"]})
     f_hist.write_text(json.dumps(hist[-400:], ensure_ascii=False, indent=1) + "\n", "utf-8")
+    # data.json : detail par pompe et par jour, lu par la page index.html
+    f_data = racine / "data.json"
+    data = json.loads(f_data.read_text("utf-8")) if f_data.exists() else {"history": []}
+    data = {
+        "vehicle": {"name": "Skoda Kamiq", "tank_l": RESERVOIR_L},
+        "fuel": "Super 95 (E10)",
+        "source": "carbu.com",
+        "stations": [{"id": i, "zone": z, "name": n, "addr": a} for i, z, n, a in POMPES],
+        "history": [h for h in data.get("history", []) if h["date"] != sortie["date"]],
+    }
+    data["history"].append({"date": sortie["date"], "time": maintenant.strftime("%H:%M"),
+                            "prices": {x["id"]: x["prix"] for x in sortie["pompes"]}})
+    data["history"] = data["history"][-400:]
+    f_data.write_text(json.dumps(data, ensure_ascii=False, indent=1) + "\n", "utf-8")
+
     print(f"{sortie['nb_pompes']} pompes, min {sortie['min_prix']} ({sortie['min_nom']}), max {sortie['max_prix']}")
     return 0
 
