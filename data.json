@@ -1,4 +1,174 @@
 {
+ "vehicle": {
+  "name": "Skoda Kamiq",
+  "tank_l": 50
+ },
+ "fuel": "Super 95 (E10)",
+ "source": "carbu.com",
+ "stations": [
+  {
+   "id": "2051",
+   "zone": "Waremme",
+   "name": "Shell Express Waremme",
+   "addr": "Chaussée Romaine 218-220, 4300 Waremme"
+  },
+  {
+   "id": "869",
+   "zone": "Waremme",
+   "name": "Lukoil Waremme",
+   "addr": "Rue Saint-Eloi 2, 4300 Waremme"
+  },
+  {
+   "id": "1632",
+   "zone": "Waremme",
+   "name": "Q8 Easy Waremme",
+   "addr": "Place de Gérardmer 55, 4300 Waremme"
+  },
+  {
+   "id": "307",
+   "zone": "Waremme",
+   "name": "Q8 Waremme",
+   "addr": "Rue de Huy 157, 4300 Waremme"
+  },
+  {
+   "id": "2781",
+   "zone": "E40",
+   "name": "TotalEnergies Waremme (aire E40, direction Liège)",
+   "addr": "Autoroute E40 Bruxelles-Liège, 4300 Waremme"
+  },
+  {
+   "id": "3225",
+   "zone": "Remicourt",
+   "name": "Esso Remicourt",
+   "addr": "Chaussée Verte 10, 4350 Remicourt"
+  },
+  {
+   "id": "3905",
+   "zone": "Awans",
+   "name": "Q8 Awans",
+   "addr": "Route de Bruxelles 170, 4340 Awans"
+  },
+  {
+   "id": "2786",
+   "zone": "Awans",
+   "name": "TotalEnergies Hognoul",
+   "addr": "Chaussée de Bruxelles 58, 4342 Hognoul"
+  },
+  {
+   "id": "3745",
+   "zone": "Loncin / Ans",
+   "name": "DATS 24 Loncin",
+   "addr": "Rue Edouard Colson 316, 4431 Loncin"
+  },
+  {
+   "id": "1633",
+   "zone": "Loncin / Ans",
+   "name": "Q8 Easy Ans",
+   "addr": "Rue Jean Jaurès 33, 4430 Ans"
+  },
+  {
+   "id": "163",
+   "zone": "Loncin / Ans",
+   "name": "DATS 24 Ans",
+   "addr": "Rue des Français 88, 4430 Ans"
+  },
+  {
+   "id": "2053",
+   "zone": "Loncin / Ans",
+   "name": "Shell Express Ans",
+   "addr": "Chaussée du Roi Albert 7, 4430 Ans"
+  },
+  {
+   "id": "1684",
+   "zone": "Rocourt",
+   "name": "Q8 Easy Rocourt",
+   "addr": "Chaussée de Tongres 90, 4000 Rocourt"
+  },
+  {
+   "id": "2105",
+   "zone": "Rocourt",
+   "name": "Shell Express Rocourt",
+   "addr": "Chaussée de Tongres 338, 4000 Rocourt"
+  },
+  {
+   "id": "380",
+   "zone": "Rocourt",
+   "name": "Q8 Rocourt",
+   "addr": "Chaussée de Tongres 625, 4000 Rocourt"
+  },
+  {
+   "id": "2396",
+   "zone": "Vottem",
+   "name": "Texaco Vottem",
+   "addr": "Rue Bonnier du Chêne 97, 4041 Vottem"
+  },
+  {
+   "id": "4144",
+   "zone": "Vottem",
+   "name": "Taverniers (Esso) Vottem",
+   "addr": "Sous la Ville 2, 4041 Vottem"
+  },
+  {
+   "id": "2055",
+   "zone": "Herstal",
+   "name": "Shell Express Herstal",
+   "addr": "Rue P.-J. Antoine 6, 4040 Herstal"
+  },
+  {
+   "id": "4005",
+   "zone": "Herstal",
+   "name": "Shell Express Herstal (Basse Campagne)",
+   "addr": "Rue Basse Campagne, 4040 Herstal"
+  },
+  {
+   "id": "871",
+   "zone": "Herstal",
+   "name": "Lukoil Herstal",
+   "addr": "Boulevard Zénobe Gramme 51, 4040 Herstal"
+  },
+  {
+   "id": "143",
+   "zone": "Herstal",
+   "name": "DATS 24 Herstal",
+   "addr": "Boulevard Zénobe Gramme 17, 4040 Herstal"
+  },
+  {
+   "id": "1592",
+   "zone": "Herstal",
+   "name": "Station Piron",
+   "addr": "Rue de Hermée 196, 4040 Herstal"
+  },
+  {
+   "id": "2789",
+   "zone": "Herstal",
+   "name": "TotalEnergies Herstal",
+   "addr": "Rue P.-J. Antoine 22, 4040 Herstal"
+  },
+  {
+   "id": "17166",
+   "zone": "Herstal",
+   "name": "Q8 Herstal (Hermée)",
+   "addr": "Rue de Hermée 207, 4040 Herstal"
+  },
+  {
+   "id": "20876",
+   "zone": "Herstal",
+   "name": "Shell Herstal",
+   "addr": "Rue de Hermée 201, 4040 Herstal"
+  },
+  {
+   "id": "347",
+   "zone": "Herstal",
+   "name": "TotalEnergies Herstal Amitié",
+   "addr": "Rue de l'Amitié 91, 4040 Herstal"
+  },
+  {
+   "id": "348",
+   "zone": "Herstal",
+   "name": "Q8 Herstal (Crucifix)",
+   "addr": "Rue du Crucifix 40, 4040 Herstal"
+  }
+ ],
  "history": [
   {
    "date": "2026-11-26",
@@ -16,6 +186,39 @@
     "1633": 1.612,
     "163": 1.612,
     "2053": 1.612,
+    "1684": 1.612,
+    "2105": 1.612,
+    "380": 1.612,
+    "2396": 1.782,
+    "4144": 1.782,
+    "2055": 1.612,
+    "4005": 1.612,
+    "871": 1.626,
+    "143": 1.626,
+    "1592": 1.652,
+    "2789": 1.659,
+    "17166": 1.782,
+    "20876": 1.782,
+    "347": 1.782,
+    "348": 1.782
+   }
+  },
+  {
+   "date": "2026-11-27",
+   "time": "08:19",
+   "prices": {
+    "2051": 1.602,
+    "869": 1.632,
+    "1632": 1.782,
+    "307": 1.782,
+    "2781": 1.782,
+    "3225": 1.717,
+    "3905": 1.782,
+    "2786": 1.782,
+    "3745": 1.609,
+    "1633": 1.612,
+    "163": 1.612,
+    "2053": 1.782,
     "1684": 1.612,
     "2105": 1.612,
     "380": 1.612,
